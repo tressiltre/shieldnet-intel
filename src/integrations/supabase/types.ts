@@ -14,7 +14,196 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          created_at: string
+          description: string | null
+          id: string
+          ioc_id: string | null
+          severity: string
+          status: string | null
+          title: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          ioc_id?: string | null
+          severity: string
+          status?: string | null
+          title: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          ioc_id?: string | null
+          severity?: string
+          status?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_ioc_id_fkey"
+            columns: ["ioc_id"]
+            isOneToOne: false
+            referencedRelation: "iocs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enrichment_data: {
+        Row: {
+          created_at: string
+          data: Json
+          data_type: string
+          id: string
+          ioc_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          data_type: string
+          id?: string
+          ioc_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          data_type?: string
+          id?: string
+          ioc_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrichment_data_ioc_id_fkey"
+            columns: ["ioc_id"]
+            isOneToOne: false
+            referencedRelation: "iocs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      iocs: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          first_seen: string
+          id: string
+          indicator: string
+          last_seen: string
+          severity: string
+          source: string
+          status: string | null
+          tags: string[] | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          first_seen?: string
+          id?: string
+          indicator: string
+          last_seen?: string
+          severity: string
+          source: string
+          status?: string | null
+          tags?: string[] | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          first_seen?: string
+          id?: string
+          indicator?: string
+          last_seen?: string
+          severity?: string
+          source?: string
+          status?: string | null
+          tags?: string[] | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          clearance_level: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          organization: string | null
+          updated_at: string
+        }
+        Insert: {
+          clearance_level?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          organization?: string | null
+          updated_at?: string
+        }
+        Update: {
+          clearance_level?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          organization?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      threat_feeds: {
+        Row: {
+          created_at: string
+          feed_type: string
+          id: string
+          last_updated: string | null
+          name: string
+          status: string | null
+          total_indicators: number | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          feed_type: string
+          id?: string
+          last_updated?: string | null
+          name: string
+          status?: string | null
+          total_indicators?: number | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          feed_type?: string
+          id?: string
+          last_updated?: string | null
+          name?: string
+          status?: string | null
+          total_indicators?: number | null
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
