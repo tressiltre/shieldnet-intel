@@ -1,12 +1,56 @@
-import { Shield, Activity, AlertTriangle, Database, Search, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Shield, Activity, AlertTriangle, Database, Search, TrendingUp, LogOut } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ThreatFeed from "@/components/ThreatFeed";
 import StatsGrid from "@/components/StatsGrid";
 import ThreatChart from "@/components/ThreatChart";
+import ThreatScanner from "@/components/ThreatScanner";
+import { useToast } from "@/hooks/use-toast";
+import type { User } from "@supabase/supabase-js";
 
 const Index = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check authentication
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        navigate("/auth");
+      } else {
+        setUser(session.user);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT" || !session) {
+        navigate("/auth");
+      } else {
+        setUser(session.user);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Logged Out",
+      description: "You have been securely logged out.",
+    });
+  };
+
+  if (!user) {
+    return null; // Loading state while checking auth
+  }
+
   return (
     <div className="min-h-screen bg-background relative">
       {/* Header */}
@@ -28,9 +72,12 @@ const Index = () => {
                 <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
                 SYSTEM ACTIVE
               </Badge>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Search className="w-4 h-4" />
-                IOC Search
+              <Badge variant="secondary" className="font-mono text-xs">
+                {user.email}
+              </Badge>
+              <Button variant="outline" size="sm" className="gap-2" onClick={handleLogout}>
+                <LogOut className="w-4 h-4" />
+                Logout
               </Button>
             </div>
           </div>
@@ -46,6 +93,11 @@ const Index = () => {
             <h2 className="text-xl font-semibold">Threat Intelligence Overview</h2>
           </div>
           <StatsGrid />
+        </section>
+
+        {/* Real-Time Threat Scanner */}
+        <section>
+          <ThreatScanner />
         </section>
 
         {/* Threat Visualization */}
