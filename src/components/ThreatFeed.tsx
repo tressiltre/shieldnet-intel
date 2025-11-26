@@ -1,65 +1,24 @@
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertCircle, Globe, Hash, Link } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import { threatService, Threat } from "@/services/threatService";
 
 const ThreatFeed = () => {
-  const threats = [
-    {
-      type: "IP",
-      value: "192.168.45.123",
-      severity: "critical",
-      source: "AbuseIPDB",
-      timestamp: "2 min ago",
-      description: "Brute force attack attempts",
-      icon: Globe,
-    },
-    {
-      type: "Domain",
-      value: "malicious-site.xyz",
-      severity: "high",
-      source: "URLhaus",
-      timestamp: "5 min ago",
-      description: "Phishing campaign detected",
-      icon: Link,
-    },
-    {
-      type: "Hash",
-      value: "a3f2c1e9b4d...",
-      severity: "critical",
-      source: "MalwareBazaar",
-      timestamp: "8 min ago",
-      description: "Ransomware payload identified",
-      icon: Hash,
-    },
-    {
-      type: "IP",
-      value: "203.45.78.90",
-      severity: "medium",
-      source: "Blocklist.de",
-      timestamp: "12 min ago",
-      description: "Port scanning activity",
-      icon: Globe,
-    },
-    {
-      type: "Domain",
-      value: "suspicious-domain.net",
-      severity: "high",
-      source: "PhishTank",
-      timestamp: "15 min ago",
-      description: "Credential harvesting page",
-      icon: Link,
-    },
-    {
-      type: "IP",
-      value: "45.123.67.89",
-      severity: "low",
-      source: "SSLBL",
-      timestamp: "18 min ago",
-      description: "Suspicious SSL certificate",
-      icon: Globe,
-    },
-  ];
+  const [threats, setThreats] = useState<Threat[]>([]);
+
+  useEffect(() => {
+    const loadThreats = async () => {
+      const data = await threatService.getThreats();
+      setThreats(data);
+    };
+    loadThreats();
+
+    // Refresh every 30 seconds
+    const interval = setInterval(loadThreats, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -98,7 +57,7 @@ const ThreatFeed = () => {
                         </Badge>
                         <span className="text-xs text-muted-foreground">{threat.timestamp}</span>
                       </div>
-                      <div className="font-mono text-sm font-medium break-all">{threat.value}</div>
+                      <div className="font-mono text-sm font-medium break-all">{threat.indicator}</div>
                     </div>
                     <Badge className={`uppercase text-xs ${getSeverityColor(threat.severity)}`}>
                       {threat.severity}

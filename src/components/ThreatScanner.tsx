@@ -3,7 +3,7 @@ import { Shield, Scan, CheckCircle2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
+import { threatService } from "@/services/threatService";
 import { useToast } from "@/hooks/use-toast";
 
 const ThreatScanner = () => {
@@ -29,7 +29,7 @@ const ThreatScanner = () => {
       if (error) throw error;
 
       setLastScan(data);
-      
+
       toast({
         title: "Threat Scan Complete",
         description: `Detected ${data.threats_detected} new threat indicators`,
