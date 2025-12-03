@@ -13,6 +13,9 @@ import Alerts from "@/pages/Alerts";
 import Reports from "@/pages/Reports";
 import Settings from "@/pages/Settings";
 import Auth from "@/pages/Auth";
+import ActiveThreats from "@/pages/ActiveThreats";
+import SystemHealth from "@/pages/SystemHealth";
+import NetworkAnalysis from "@/pages/NetworkAnalysis";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +36,9 @@ const App = () => (
               <Route path="/alerts" element={<Alerts />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/active-threats" element={<ActiveThreats />} />
+              <Route path="/system-health" element={<SystemHealth />} />
+              <Route path="/network-analysis" element={<NetworkAnalysis />} />
             </Route>
           </Routes>
         </BrowserRouter>

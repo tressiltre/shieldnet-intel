@@ -13,6 +13,9 @@ import {
     Activity,
     Database,
     User,
+    Zap,
+    Server,
+    Network,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +27,9 @@ const menuItems = [
     { icon: Database, label: "Scanner", path: "/scanner" },
     { icon: AlertTriangle, label: "Alerts", path: "/alerts" },
     { icon: FileText, label: "Reports", path: "/reports" },
+    { icon: Zap, label: "Active Threats", path: "/active-threats" },
+    { icon: Server, label: "System Health", path: "/system-health" },
+    { icon: Network, label: "Network Analysis", path: "/network-analysis" },
     { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
